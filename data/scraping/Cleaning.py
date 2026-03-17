@@ -22,19 +22,26 @@ def extract_type(text):
     return 'อื่นๆ'
 
 def extract_location(text):
-    # พยายามดึงอำเภอและตำบลจากชื่อประกาศ โดยใช้รูปแบบ "ตำบล, อำเภอ, จังหวัด"
-    match = re.search(r'([ก-๙a-zA-Z\s]+),\s*([ก-๙a-zA-Z\s]+),\s*นครปฐม', str(text))
-    if match:
-        loc = f"{match.group(1).strip()}, {match.group(2).strip()}"
+    text_str = str(text)
+    
+    # 1. ลองหาจาก ตำบล... อำเภอ... หรือ ต.... อ.... ก่อน
+    exact_match = re.search(r'(?:ตำบล|ต\.)\s*([ก-๙a-zA-Z]+)\s*(?:อำเภอ|อ\.)\s*([ก-๙a-zA-Z]+)', text_str)
+    
+    if exact_match:
+        loc = f"{exact_match.group(1).strip()}, {exact_match.group(2).strip()}"
     else:
-        match2 = re.search(r'([ก-๙a-zA-Z\s]+),\s*นครปฐม', str(text))
-        if match2:
-            loc = match2.group(1).strip()
+        match = re.search(r'([ก-๙a-zA-Z\s]+),\s*([ก-๙a-zA-Z\s]+),\s*นครปฐม', text_str)
+        if match:
+            loc = f"{match.group(1).strip()}, {match.group(2).strip()}"
         else:
-            loc = 'นครปฐม (ไม่ระบุอำเภอ)'
+            match2 = re.search(r'([ก-๙a-zA-Z\s]+),\s*นครปฐม', text_str)
+            if match2:
+                loc = match2.group(1).strip()
+            else:
+                loc = 'นครปฐม (ไม่ระบุอำเภอ)'
             
-    # รายการคำที่ต้องการตัดออกจากชื่อทำเล
-    words_to_remove = ['ขาย', 'ให้เช่า', 'ด่วน', 'คอนโด', 'บ้านแฝด', 'บ้านเดี่ยว', 'ทาวน์โฮม', 'ทาวน์เฮ้าส์', 'ที่ดิน', 'อพาร์ทเม้นท์', 'อาคารพาณิชย์', 'หอพัก','ร้านของ','คลังสินค้า']
+    # 3. ตัดคำโฆษณาต่างๆ ออก เพื่อให้เหลือแค่ทำเลจริงๆ
+    words_to_remove = ['ขาย', 'ให้เช่า', 'ด่วน', 'คอนโด', 'บ้านแฝด', 'บ้านเดี่ยว', 'ทาวน์โฮม', 'ทาวน์เฮ้าส์', 'ที่ดิน', 'อพาร์ทเม้นท์', 'อาคารพาณิชย์', 'หอพัก', 'ร้านของ', 'คลังสินค้า']
     
     for word in words_to_remove:
         loc = loc.replace(word, '')
