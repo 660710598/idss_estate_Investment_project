@@ -6,7 +6,7 @@ import sqlite3
 print("กำลังโหลดข้อมูลและเริ่มการทำความสะอาด (Data Cleaning)...")
 df = pd.read_csv('data/scraping/NakhonPathom_Properties.csv')
 
-# 1. ฟังก์ชันตัวช่วยสำหรับดึงข้อมูลออกจากข้อความ (Regex)
+# ฟังก์ชันตัวช่วยสำหรับดึงข้อมูลออกจากข้อความ (Regex)
 def extract_price(text):
     match = re.search(r'฿\s*([\d,]+)', str(text))
     if match:
@@ -75,15 +75,14 @@ def generate_idss_features_real_data(row):
         base_cg = np.random.uniform(2.0, 3.5)
         
     else:
-        # อสังหาฯ ประเภทอื่นๆ
         base_yield = np.random.uniform(0.040, 0.050)
         base_cg = np.random.uniform(3.0, 5.0)
 
-    # 1. สร้างค่าเช่ารายเดือนที่ดูสมจริง (ปัดเศษหลักร้อย)
+    # สร้างค่าเช่ารายเดือนที่ดูสมจริง (ปัดเศษหลักร้อย)
     annual_rent = price * base_yield
     est_rent_month = round(annual_rent / 12, -2) 
 
-    # 2. คำนวณ Yield (%) กลับจากค่าเช่ารายเดือนที่ปัดเศษแล้ว 
+    # คำนวณ Yield (%) กลับจากค่าเช่ารายเดือนที่ปัดเศษแล้ว 
     final_yield = ((est_rent_month * 12) / price) * 100
 
     return est_rent_month, round(final_yield, 2), round(base_cg, 2)
