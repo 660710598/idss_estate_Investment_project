@@ -6,7 +6,7 @@ import sqlite3
 print("กำลังโหลดข้อมูลและเริ่มการทำความสะอาด (Data Cleaning)...")
 df = pd.read_csv('data/scraping/NakhonPathom_Properties.csv')
 
-# ฟังก์ชันตัวช่วยสำหรับดึงข้อมูลออกจากข้อความ (Regex)
+# ฟังก์ชันตัวช่วยสำหรับดึงข้อมูลออกจากข้อความ
 def extract_price(text):
     match = re.search(r'฿\s*([\d,]+)', str(text))
     if match:
@@ -15,7 +15,7 @@ def extract_price(text):
     return np.nan
 
 def extract_type(text):
-    types = ['คอนโด', 'บ้านเดี่ยว', 'ทาวน์เฮ้าส์', 'ทาวน์โฮม', 'ที่ดิน', 'อพาร์ทเม้นท์', 'อาคารพาณิชย์']
+    types = ['คอนโด', 'บ้านแฝด', 'บ้านเดี่ยว', 'ทาวน์โฮม', 'ทาวน์เฮ้าส์', 'ที่ดิน', 'อพาร์ทเม้นท์', 'อาคารพาณิชย์']
     for t in types:
         if t in str(text):
             return t
@@ -25,11 +25,21 @@ def extract_location(text):
     # พยายามดึงอำเภอและตำบลจากชื่อประกาศ โดยใช้รูปแบบ "ตำบล, อำเภอ, จังหวัด"
     match = re.search(r'([ก-๙a-zA-Z\s]+),\s*([ก-๙a-zA-Z\s]+),\s*นครปฐม', str(text))
     if match:
-        return f"{match.group(1).strip()}, {match.group(2).strip()}"
-    match2 = re.search(r'([ก-๙a-zA-Z\s]+),\s*นครปฐม', str(text))
-    if match2:
-        return match2.group(1).strip()
-    return 'นครปฐม (ไม่ระบุอำเภอ)'
+        loc = f"{match.group(1).strip()}, {match.group(2).strip()}"
+    else:
+        match2 = re.search(r'([ก-๙a-zA-Z\s]+),\s*นครปฐม', str(text))
+        if match2:
+            loc = match2.group(1).strip()
+        else:
+            loc = 'นครปฐม (ไม่ระบุอำเภอ)'
+            
+    # รายการคำที่ต้องการตัดออกจากชื่อทำเล
+    words_to_remove = ['ขาย', 'ให้เช่า', 'ด่วน', 'คอนโด', 'บ้านแฝด', 'บ้านเดี่ยว', 'ทาวน์โฮม', 'ทาวน์เฮ้าส์', 'ที่ดิน', 'อพาร์ทเม้นท์', 'อาคารพาณิชย์', 'หอพัก','ร้านของ','คลังสินค้า']
+    
+    for word in words_to_remove:
+        loc = loc.replace(word, '')
+        
+    return loc.strip()
 
 def extract_area(text):
     match = re.search(r'([\d,.]+)\s*(ตรม\.|ตร\.ว\.|ไร่)', str(text))
@@ -37,11 +47,12 @@ def extract_area(text):
         return match.group(0)
     return 'ไม่ระบุ'
 
-# นำฟังก์ชันไปประยุกต์ใช้กับคอลัมน์ 'ชื่อประกาศ'
-df['Price_THB'] = df['ชื่อประกาศ'].apply(extract_price)
-df['Property_Type'] = df['ชื่อประกาศ'].apply(extract_type)
-df['Location'] = df['ชื่อประกาศ'].apply(extract_location)
+# นำฟังก์ชันไปประยุกต์ใช้กับคอลัมน์ 
+df['Price_THB'] = df['ชื่อประกาศ'].apply(extract_price)      
 df['Area'] = df['ชื่อประกาศ'].apply(extract_area)
+df['Property_Type'] = df['ชื่อประกาศ'].apply(extract_type) 
+df['Location'] = df['ชื่อประกาศ'].apply(extract_location)
+
 
 np.random.seed(8) 
 def generate_idss_features_real_data(row):
@@ -62,7 +73,7 @@ def generate_idss_features_real_data(row):
         if any(zone in loc for zone in ['ศาลายา', 'กำแพงแสน', 'เมืองนครปฐม']):
             base_yield = np.random.uniform(0.040, 0.060)
 
-    elif prop_type in ['บ้านเดี่ยว', 'ทาวน์เฮ้าส์', 'ทาวน์โฮม']:
+    elif prop_type in ['บ้านเดี่ยว', 'บ้านแฝด', 'ทาวน์เฮ้าส์', 'ทาวน์โฮม']:
         base_yield = np.random.uniform(0.035, 0.045)
         base_cg = np.random.uniform(5.0, 7.0)
 

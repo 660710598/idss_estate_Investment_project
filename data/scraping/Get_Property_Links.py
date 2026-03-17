@@ -48,23 +48,9 @@ while len(property_list) < target_amount:
             
             if not title.strip():
                 continue
-
-            # 2. ดึงราคา (มักอยู่ใน class ที่มีคำว่า "price")
-            try:
-                price = item.find_element(By.CSS_SELECTOR, "[class*='price']").text
-            except:
-                price = "ไม่ระบุราคา"
-                
-            # 3. ดึงสถานที่ทำเล
-            try:
-                location = item.find_element(By.CSS_SELECTOR, "[class*='location'], [class*='address']").text
-            except:
-                location = "ไม่ระบุสถานที่"
                 
             property_list.append({
                 "ชื่อประกาศ": title, 
-                "ราคา": price, 
-                "สถานที่": location, 
                 "ลิงก์": link
             })
         except Exception as e:
