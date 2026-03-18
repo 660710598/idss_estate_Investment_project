@@ -1,0 +1,18 @@
+{
+    "investment_criteria": {
+        "min_rental_yield_pct": 5.0, 
+        "good_rental_yield_pct": 7.0,
+        "min_capital_gain_pct": 3.0,
+        "good_capital_gain_pct": 5.0
+    },
+    "property_type_suitability": {
+        "condo": {"best_for": ["student_rental", "working_class"], "risk_level": "medium"},
+        "land": {"best_for": ["long_term_speculation", "farming"], "risk_level": "high"},
+        "house": {"best_for": ["family", "long_term_residence"], "risk_level": "low"}
+    },
+    "risk_scoring_weights": {
+        "low_yield_penalty": -2,
+        "bad_location_penalty": -3,
+        "high_price_penalty": -1
+    }
+}
