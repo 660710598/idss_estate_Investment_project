@@ -1,4 +1,6 @@
-pandas>=1.5
-numpy>=1.23
+pandas>=1.5.3
+numpy>=1.23.5
 selenium>=4.8
+streamlit>=1.20
+webdriver-manager>=3.8.5
 

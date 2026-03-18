@@ -8,7 +8,7 @@
 - `knowledge/` - กฎความรู้และไฟล์เกี่ยวกับกฎ (เช่น `city_plan_rules.py`, `expert_rules.json`)
 - `model/` - โมดูลด้านโมเดล เช่น `decision_tree.py`, `financial_calc.py`
 
-## วิธีติดตั้ง (จาก `requirements.txt`)
+## วิธีติดตั้ง และรันโปรเจค (Quick Start)
 
 1. สร้าง virtual environment (Windows PowerShell):
 
@@ -31,19 +31,41 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-3. ข้อสังเกตสำหรับ Selenium:
-- `selenium` ต้องการ WebDriver (เช่น ChromeDriver, geckodriver) เพื่อควบคุมเบราว์เซอร์ — ติดตั้งหรือตั้งค่าตัวจัดการไดร์เวอร์ตามเบราว์เซอร์ที่ใช้
-- ถ้าใช้ Selenium 4.6+ ตัวจัดการไดร์เวอร์อาจช่วยดาวน์โหลดไดร์เวอร์ให้โดยอัตโนมัติ แต่ถ้าพบปัญหาให้ดาวน์โหลดไดร์เวอร์ที่ตรงกับเวอร์ชันเบราว์เซอร์แล้ววางไว้ใน PATH
+3. WebDriver / Selenium:
+- สคริปต์ `data/scraping/Get_Property_Links.py` ใช้ `selenium` + เบราว์เซอร์ (เช่น Chrome). ต้องมี WebDriver (เช่น ChromeDriver) ที่ตรงกับเวอร์ชันเบราว์เซอร์ และอยู่ใน `PATH`.
+- ทางเลือก: ติดตั้ง `webdriver-manager` (รวมไว้ใน `requirements.txt`) และปรับสคริปต์ให้ใช้ `webdriver_manager.chrome import ChromeDriverManager` เพื่อดาวน์โหลดไดร์เวอร์อัตโนมัติ.
 
-4. ทดสอบการติดตั้ง (ตัวอย่าง):
+4. คำสั่งรันสำคัญ (ตัวอย่าง):
+
+- ดึงลิงก์ประกาศ (scraper):
+
+```powershell
+python data/scraping/Get_Property_Links.py
+```
+
+- ทำความสะอาดข้อมูลและสร้างไฟล์ CSV ที่ใช้โดยแอป:
+
+```powershell
+python data/scraping/Cleaning.py
+```
+
+- รันแอป Streamlit (UI):
+
+```powershell
+streamlit run app/main.py
+```
+
+5. ทดสอบการติดตั้ง (ตัวอย่างเล็กน้อย):
 
 ```python
 import pandas as pd
 import numpy as np
 import selenium
+import streamlit
 print('pandas', pd.__version__)
 print('numpy', np.__version__)
 print('selenium', selenium.__version__)
+print('streamlit', streamlit.__version__)
 ```
 ## ผู้จัดทำ
 - 660710095 มโนรินทร์ นันทะนิ
