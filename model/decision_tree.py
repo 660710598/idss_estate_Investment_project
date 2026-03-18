@@ -8,6 +8,11 @@ def filter_and_rank_properties(df, user_budget, user_location, user_property_typ
     """
     กระบวนการตัดสินใจ (Decision Logic)
     รับ DataFrame และเงื่อนไขผู้ใช้ แล้วคืนค่า Top ทางเลือกที่ดีที่สุด
+
+    ขั้นตอน:
+    1. Design Phase: คัดกรองเบื้องต้นตามงบและความต้องการ
+    2. Knowledgebase Application: ประเมินความเสี่ยงตามกฎผู้เชี่ยวชาญ
+    3. Choice Phase: ให้คะแนนและจัดอันดับทางเลือกที่เหลือ
     """
     # 1. Design Phase: คัดกรองเบื้องต้น (Budget & Preference)
     filtered_df = df[
@@ -16,7 +21,7 @@ def filter_and_rank_properties(df, user_budget, user_location, user_property_typ
         (df['Property_Type'] == user_property_type)
     ].copy()
     
-    # ถ้าไม่มีข้อมูลผ่านเกณฑ์เลย คืนค่าเป็น DataFrame ว่างๆ กลับไป
+    # ถ้าไม่มีข้อมูลผ่านเกณฑ์เลย คืนค่าเป็น DataFrame ว่างๆ ก็จะตีกลับไป
     if filtered_df.empty:
         return filtered_df
         
