@@ -1,4 +1,3 @@
-
 def calculate_monthly_payment(principal, annual_interest_rate, years):
     """
     ฟังก์ชันคำนวณยอดผ่อนชำระต่อเดือน (What-If Analysis)
