@@ -15,7 +15,7 @@ def extract_price(text):
     return np.nan
 
 def extract_type(text):
-    types = ['คอนโด', 'บ้านแฝด', 'บ้านเดี่ยว', 'ทาวน์โฮม', 'ทาวน์เฮ้าส์', 'ที่ดิน', 'อพาร์ทเม้นท์', 'อาคารพาณิชย์']
+    types = ['โรงงาน', 'คลังสินค้า', 'โกดัง', 'อพาร์ทเม้นท์', 'หอพัก', 'อาคารพาณิชย์', 'คอนโด', 'บ้านเดี่ยว', 'บ้านแฝด', 'ทาวน์โฮม', 'ทาวน์เฮ้าส์', 'ร้านขาย', 'ที่ดิน' ]
     for t in types:
         if t in str(text):
             return t
@@ -67,16 +67,14 @@ def generate_idss_features_real_data(row):
     prop_type = str(row['Property_Type'])
     loc = str(row['Location'])
 
-    if pd.isna(price) or price == 0:
+    # เช็คว่ามีราคาหรือไม่
+    if pd.isna(price) or price <= 0:
         return np.nan, np.nan, np.nan
-
-    # --- กำหนด Yield และ Capital Gain ตามข้อมูลอ้างอิงตลาดจริง ---
+    
     if prop_type == 'คอนโด':
-        # อ้างอิง: คอนโดนครปฐม Yield เฉลี่ย 3 - 4% และ CG เฉลี่ย 3.4 - 5%
         base_yield = np.random.uniform(0.030, 0.040)
         base_cg = np.random.uniform(3.4, 5.0) 
-        
-        # ล็อก Yield ให้สูงขึ้นอีกนิด หากอยู่ในทำเลนักศึกษา 
+       
         if any(zone in loc for zone in ['ศาลายา', 'กำแพงแสน', 'เมืองนครปฐม']):
             base_yield = np.random.uniform(0.040, 0.060)
 
@@ -88,19 +86,24 @@ def generate_idss_features_real_data(row):
         base_yield = np.random.uniform(0.010, 0.020)
         base_cg = np.random.uniform(10.0, 15.0)
         
-    elif prop_type == 'อพาร์ทเม้นท์' or 'หอพัก' in str(row['ชื่อประกาศ']):
+    elif prop_type in ['อพาร์ทเม้นท์', 'หอพัก']:
         base_yield = np.random.uniform(0.060, 0.080)
         base_cg = np.random.uniform(2.0, 3.5)
-        
-    else:
-        base_yield = np.random.uniform(0.040, 0.050)
+    
+    elif prop_type in ['อาคารพาณิชย์', 'ร้านขาย']:
+        base_yield = np.random.uniform(0.040, 0.060)
+        base_cg = np.random.uniform(4.0, 6.0)
+
+    elif prop_type in ['โรงงาน', 'คลังสินค้า', 'โกดัง']:
+        base_yield = np.random.uniform(0.055, 0.075)
         base_cg = np.random.uniform(3.0, 5.0)
 
-    # สร้างค่าเช่ารายเดือนที่ดูสมจริง (ปัดเศษหลักร้อย)
+    else: 
+        base_yield = np.random.uniform(0.035, 0.050)
+        base_cg = np.random.uniform(3.0, 5.0)
+
     annual_rent = price * base_yield
     est_rent_month = round(annual_rent / 12, -2) 
-
-    # คำนวณ Yield (%) กลับจากค่าเช่ารายเดือนที่ปัดเศษแล้ว 
     final_yield = ((est_rent_month * 12) / price) * 100
 
     return est_rent_month, round(final_yield, 2), round(base_cg, 2)
