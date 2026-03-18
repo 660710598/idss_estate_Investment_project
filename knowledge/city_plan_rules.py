@@ -88,15 +88,3 @@ def check_yield_risk(yield_pct):
         return "⚠️ ความเสี่ยงสภาพคล่อง: ผลตอบแทนจากการเช่าน้อยกว่า 4% อาจไม่คุ้มค่าหากต้องกู้เงินมาลงทุน"
     return "✅ ผลตอบแทนการเช่าอยู่ในเกณฑ์ดี"
 
-# ---------------------------------------------------------
-# ตัวอย่างการนำไปเรียกใช้ (สามารถลบออกได้ตอนนำไปใช้งานจริง)
-if __name__ == "__main__":
-    # ทดสอบจำลองดึงข้อมูลจาก Row ที่ 1 ของ CSV ของคุณ (ร้านขาย ที่ ศาลายา)
-    sample_location = "ศาลายา, พุทธมณฑล"
-    sample_type = "ร้านขาย"
-    #
-    print(f"พื้นที่: {sample_location}")
-    print(f"โซนสี: {get_location_zone(sample_location)}")
-    print("ผลการวิเคราะห์ความเสี่ยง:")
-    for warning in check_city_plan_risk(sample_location, sample_type):
-        print(" -", warning)
