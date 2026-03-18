@@ -119,7 +119,7 @@ final_cols = ['Title_Clean', 'Property_Type', 'Location', 'Price_THB', 'Area', '
 df_clean = df[final_cols].copy()
 
 # ลบการขึ้นบรรทัดใหม่ทั้งหมดเพื่อให้ข้อมูลอยู่บรรทัดเดียว
-for col in df_clean.select_dtypes(include=['object', 'str']).columns:
+for col in df_clean.select_dtypes(include=['object', 'string']).columns:
     df_clean[col] = df_clean[col].astype(str).str.replace(r'\n', ' ', regex=True).str.replace(r'\r', '', regex=True)
 
 conn = sqlite3.connect('data/scraping/NakhonPathom_IDSS.db')
