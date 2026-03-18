@@ -1,0 +1,6 @@
+# Ignore virtual environment
+.venv/
+
+# Ignore scraped data files
+data/scraping/*.db
+data/scraping/*.csv
