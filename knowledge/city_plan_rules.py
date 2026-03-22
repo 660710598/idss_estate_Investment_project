@@ -74,15 +74,3 @@ def check_city_plan_risk(location_text, property_type):
         risks.append("💧 ความเสี่ยงด้านภูมิประเทศ: พื้นที่ลุ่มต่ำ อาจมีความเสี่ยงน้ำท่วมในช่วงฤดูฝน")
 
     return risks
-
-
-def check_profitability_risk(gain_annual):
-    # ประมาณการค่าใช้จ่ายการขาย 8.8%
-    if gain_annual < 8.8:
-        return f"📉 ความเสี่ยงด้านกำไร: กำไรต่อปี ({gain_annual}%) ต่ำกว่าค่าใช้จ่ายในการขาย (8.8%) หากขายในระยะสั้นอาจขาดทุนสุทธิ"
-    return None
-
-def check_yield_risk(yield_pct):
-    if yield_pct < 4.0:
-        return "⚠️ ความเสี่ยงสภาพคล่อง: ผลตอบแทนจากการเช่าน้อยกว่า 4% อาจไม่คุ้มค่าหากต้องกู้เงินมาลงทุน"
-    return "✅ ผลตอบแทนการเช่าอยู่ในเกณฑ์ดี"
