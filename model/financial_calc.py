@@ -17,6 +17,20 @@ def calculate_monthly_payment(principal, annual_interest_rate, years):
     payment = principal * (monthly_rate * (1 + monthly_rate)**num_payments) / ((1 + monthly_rate)**num_payments - 1)
     return round(payment, 2)
 
+
+def get_affordability_flag(monthly_pay, monthly_income):
+    # ฟังก์ชันประเมินภาระผ่อนเทียบกับรายได้ (Affordability Flag)
+    if monthly_income <= 0:
+        return "❓ ไม่ทราบรายได้"
+    ratio = (monthly_pay / monthly_income) * 100
+    if ratio < 30:
+        return f"✅ ภาระผ่อนเหมาะสม ({ratio:.0f}% ของรายได้)"
+    elif ratio < 40:
+        return f"🟡 ภาระผ่อนปานกลาง ({ratio:.0f}% ของรายได้)"
+    else:
+        return f"⚠️ ภาระผ่อนสูง ({ratio:.0f}% ของรายได้)"
+    
+
 def calculate_investment_score(rental_yield, capital_gain, price):
     """
     ฟังก์ชันให้คะแนนความน่าลงทุน (เต็ม 10 คะแนน)

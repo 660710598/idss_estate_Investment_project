@@ -45,7 +45,4 @@ def get_sale_advice(net_profit):
     else:
         return "❌ อย่าเพิ่งขาย: หักภาษีและค่าใช้จ่ายแล้วอาจขาดทุน"
 
-def estimate_mortgage(price, down_payment_pct=0):
-    """คำนวณเงินผ่อนเบื้องต้น (1 ล้านละ 7,000)"""
-    loan_amount = price * (1 - (down_payment_pct / 100))
-    return (loan_amount / 1_000_000) * 7000
+
