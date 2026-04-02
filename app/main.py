@@ -69,11 +69,12 @@ if st.sidebar.button("🔍 วิเคราะห์หาตัวเลื�
             df, user_budget, user_location, user_property_type, rules_dict
         )
 
+    # เช็คว่าว่างไหม แค่รอบเดียวจบ
     if result_df.empty:
         st.warning(
             f"😔 ไม่พบ {user_property_type} ในย่าน {user_location} "
             f"ที่ราคาต่ำกว่า {user_budget:,.0f} บาท ลองปรับเพิ่มงบประมาณ หรือเลือกทำเล 'ทั้งหมด' ดูนะครับ"
-    )
+        )
 
     else:    
         # คำนวณ Affordability Score และ Final Score
@@ -99,12 +100,7 @@ if st.sidebar.button("🔍 วิเคราะห์หาตัวเลื�
             result_df[~safe_mask].sort_values('Final_Score', ascending=False)
         ]).reset_index(drop=True)
 
-    if result_df.empty:
-        st.warning(
-            f"😔 ไม่พบ {user_property_type} ในย่าน {user_location} "
-            f"ที่ราคาต่ำกว่า {user_budget:,.0f} บาท ลองปรับเงื่อนไขใหม่นะครับ"
-        )
-    else:
+        # --- แสดงผลลัพธ์ (อยู่ใน else ชุดเดียวกัน) ---
         safe_count  = len(result_df[result_df['Risk_Level'] == '✅ ผ่านเกณฑ์'])
         risky_count = len(result_df[result_df['Risk_Level'] == '🚫 ความเสี่ยงสูง'])
         st.success(f"🎉 พบทั้งหมด {len(result_df)} แห่ง — ✅ ผ่านเกณฑ์ {safe_count} แห่ง / 🚫 ความเสี่ยงสูง {risky_count} แห่ง")
@@ -181,7 +177,7 @@ if st.sidebar.button("🔍 วิเคราะห์หาตัวเลื�
 
         st.dataframe(
             table_df.style.background_gradient(
-                subset=['Final_Score'], cmap='RdYlGn', vmin=0, vmax=10  # เปลี่ยนจาก Investment_Score
+                subset=['Final_Score'], cmap='RdYlGn', vmin=0, vmax=10 
             ).format({
                 'Price_THB': '{:,.0f}',
                 'Rental_Yield_Pct': '{:.2f}%',
