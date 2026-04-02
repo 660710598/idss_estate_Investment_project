@@ -4,7 +4,7 @@ import numpy as np
 import sqlite3
 
 print("กำลังโหลดข้อมูลและเริ่มการทำความสะอาด (Data Cleaning)...")
-df = pd.read_csv('data/scraping/NakhonPathom_Properties.csv')
+df = pd.read_csv('data/NakhonPathom_Properties.csv')
 
 # ฟังก์ชันตัวช่วยสำหรับดึงข้อมูลออกจากข้อความ
 def extract_price(text):
@@ -122,11 +122,11 @@ df_clean = df[final_cols].copy()
 for col in df_clean.select_dtypes(include=['object', 'string']).columns:
     df_clean[col] = df_clean[col].astype(str).str.replace(r'\n', ' ', regex=True).str.replace(r'\r', '', regex=True)
 
-conn = sqlite3.connect('data/scraping/NakhonPathom_IDSS.db')
+conn = sqlite3.connect('data/NakhonPathom_IDSS.db')
 df.to_sql('properties', conn, if_exists='replace', index=False)
 conn.close()
 
 # บันทึกไฟล์ CSV 
-output_filename = 'data/scraping/NakhonPathom_Properties_Cleaned.csv'
+output_filename = 'data/NakhonPathom_Properties_Cleaned.csv'
 df_clean.to_csv(output_filename, index=False, encoding='utf-8-sig')
 print(f"✅ ทำความสะอาดข้อมูลเสร็จสิ้น!")

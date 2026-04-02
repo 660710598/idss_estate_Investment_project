@@ -5,11 +5,9 @@ LOCATION_ZONES = {
   # --- โซนสีแดง (พาณิชยกรรม: พุทธมณฑล / ศาลายา) ---
     "ศาลายา": {"color": "Red", "type": "Commercial", "description": "พื้นที่พาณิชยกรรมหนาแน่นสูง ใกล้มหาวิทยาลัย"},
     "พุทธมณฑล": {"color": "Red", "type": "Commercial", "description": "ศูนย์กลางพาณิชยกรรมและบริการ"},
-    "สถานีรถไฟศาลายา": {"color": "Red", "type": "Commercial", "description": "พื้นที่รอบสถานีขนส่งมวลชน"},
 
     # --- โซนสีเหลือง (ที่อยู่อาศัย: เมืองนครปฐม) ---
     "เมืองนครปฐม": {"color": "Yellow", "type": "Medium Density", "description": "ที่อยู่อาศัยหนาแน่นปานกลาง เขตเทศบาล"},
-    "นครปฐม": {"color": "Yellow", "type": "Medium Density", "description": "ที่อยู่อาศัยหนาแน่นปานกลาง"},
     "สนามจันทร์": {"color": "Yellow", "type": "Medium Density", "description": "ย่านที่อยู่อาศัยและสถานศึกษา"},
     "ห้วยจรเข้": {"color": "Yellow", "type": "Medium Density", "description": "พื้นที่ขยายตัวของที่อยู่อาศัย"},
     "พระปฐมเจดีย์": {"color": "Yellow", "type": "Medium Density", "description": "พื้นที่ชุมชนเก่าและที่อยู่อาศัย"},

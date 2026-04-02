@@ -60,6 +60,6 @@ while len(property_list) < target_amount:
     page += 1 
 
 df = pd.DataFrame(property_list)
-df.to_csv("data/scraping/NakhonPathom_Properties.csv", index=False, encoding="utf-8-sig")
+df.to_csv("data/NakhonPathom_Properties.csv", index=False, encoding="utf-8-sig")
 driver.quit()
 print("เสร็จสิ้นการดึงข้อมูล!")
