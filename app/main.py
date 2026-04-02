@@ -9,7 +9,7 @@ import pandas as pd
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from model.decision_tree import filter_and_rank_properties
-from model.financial_calc import calculate_monthly_payment, get_affordability_flag
+from model.financial_calc import calculate_monthly_payment, get_affordability_flag, calculate_affordability_score
 
 st.set_page_config(page_title="IDSS Real Estate Nakhon Pathom", layout="wide", page_icon="🏠")
 
@@ -65,10 +65,32 @@ st.markdown("ระบบประเมินความเสี่ยง ว
 if st.sidebar.button("🔍 วิเคราะห์หาตัวเลือกที่ดีที่สุด", type="primary"):
 
     with st.spinner('กำลังวิเคราะห์ข้อมูล ผังเมือง และประเมินความเสี่ยง...'):
-        # FIX: เพิ่ม rules_dict เป็น argument ที่ 5
         result_df = filter_and_rank_properties(
             df, user_budget, user_location, user_property_type, rules_dict
         )
+        
+        # เพิ่มตรงนี้ --- คำนวณ Composite Score จาก What-If
+        result_df['Affordability_Score'] = result_df['Price_THB'].apply(
+            lambda price: calculate_affordability_score(
+                calculate_monthly_payment(
+                    price * (1 - down_payment_pct / 100),
+                    interest_rate,
+                    loan_years
+                ),
+                monthly_income
+            )
+        )
+        result_df['Final_Score'] = (
+            result_df['Investment_Score'] * 0.7 +
+            result_df['Affordability_Score'] * 0.3
+        ).round(1)
+
+        # Re-sort ด้วย Final_Score
+        safe_mask = result_df['Risk_Level'] == '✅ ผ่านเกณฑ์'
+        result_df = pd.concat([
+            result_df[safe_mask].sort_values('Final_Score', ascending=False),
+            result_df[~safe_mask].sort_values('Final_Score', ascending=False)
+        ]).reset_index(drop=True)
 
     if result_df.empty:
         st.warning(
@@ -87,11 +109,12 @@ if st.sidebar.button("🔍 วิเคราะห์หาตัวเลื�
         for i, (index, row) in enumerate(top_3.iterrows()):
             with cols[i]:
                 risk_level = row.get('Risk_Level', '')
-                # ย้าย if/else เข้ามาอยู่ใน with cols[i]: ด้วย
+                # แสดงคะแนนและความเสี่ยงที่ชัดเจนบนแต่ละ card
                 if risk_level == '🚫 ความเสี่ยงสูง':
-                    st.error(f"**อันดับ {i+1}** (คะแนน: {row['Investment_Score']:.1f}/10) — 🚫 ความเสี่ยงสูง")
+                    st.error(f"**อันดับ {i+1}** Final: {row['Final_Score']:.1f}/10 — 🚫 ความเสี่ยงสูง")
                 else:
-                    st.info(f"**อันดับ {i+1}** (คะแนน: {row['Investment_Score']:.1f}/10)")
+                    st.info(f"**อันดับ {i+1}** Final: {row['Final_Score']:.1f}/10")
+                st.caption(f"📊 Investment: {row['Investment_Score']:.1f} | 💼 Affordability: {row['Affordability_Score']:.1f}")
 
                 # แสดงรายละเอียดทุก card ไม่ว่าจะ safe หรือ risky
                 st.markdown(f"**{str(row['Title_Clean'])[:50]}...**")
@@ -135,8 +158,8 @@ if st.sidebar.button("🔍 วิเคราะห์หาตัวเลื�
         display_cols = [
             'Title_Clean', 'Location', 'Price_THB', 'Area',
             'Rental_Yield_Pct', 'Capital_Gain_Pct_Per_Year',
-            'Investment_Score', 'Risk_Level',
-            'Investment_Tags','Net_Profit_5Y', 'Sale_Advice', 'Risk_Warnings'
+            'Investment_Score', 'Affordability_Score', 'Final_Score',  # เพิ่มตรงนี้
+            'Risk_Level', 'Investment_Tags', 'Net_Profit_5Y', 'Sale_Advice', 'Risk_Warnings'
         ]
         display_cols = [c for c in display_cols if c in result_df.columns]
         display_df = result_df[display_cols].copy()
@@ -150,12 +173,14 @@ if st.sidebar.button("🔍 วิเคราะห์หาตัวเลื�
 
         st.dataframe(
             table_df.style.background_gradient(
-                subset=['Investment_Score'], cmap='RdYlGn', vmin=0, vmax=10
+                subset=['Final_Score'], cmap='RdYlGn', vmin=0, vmax=10  # เปลี่ยนจาก Investment_Score
             ).format({
                 'Price_THB': '{:,.0f}',
                 'Rental_Yield_Pct': '{:.2f}%',
                 'Capital_Gain_Pct_Per_Year': '{:.2f}%',
                 'Investment_Score': '{:.1f}',
+                'Affordability_Score': '{:.1f}',
+                'Final_Score': '{:.1f}',
                 'Net_Profit_5Y': '{:.1f}%',
             }),
             use_container_width=True

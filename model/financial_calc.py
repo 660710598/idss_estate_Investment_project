@@ -30,6 +30,21 @@ def get_affordability_flag(monthly_pay, monthly_income):
     else:
         return f"⚠️ ภาระผ่อนสูง ({ratio:.0f}% ของรายได้)"
     
+def calculate_affordability_score(monthly_pay, monthly_income):
+    """คะแนน 0-10 จากภาระผ่อนเทียบรายได้"""
+    if monthly_income <= 0:
+        return 5.0  # neutral ถ้าไม่รู้รายได้
+    ratio = monthly_pay / monthly_income
+    if ratio < 0.25:
+        return 10.0   # ภาระเบา
+    elif ratio < 0.30:
+        return 8.0
+    elif ratio < 0.40:
+        return 5.0    # พอรับได้
+    elif ratio < 0.50:
+        return 2.0    # หนัก
+    else:
+        return 0.0    # หนักมาก
 
 def calculate_investment_score(rental_yield, capital_gain, price, property_type, rules_dict):
     """
