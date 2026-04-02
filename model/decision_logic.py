@@ -11,12 +11,18 @@ from knowledge.financial_rules import (
 
 # ฟังก์ชันหลักในการกรองและจัดอันดับอสังหาริมทรัพย์ตามเงื่อนไขของผู้ใช้
 def filter_and_rank_properties(df, user_budget, user_location, user_property_type, rules_dict):
-    filtered_df = df[
-        (df['Price_THB'] <= user_budget) &
-        (df['Location'].str.contains(user_location, na=False)) &
-        (df['Property_Type'] == user_property_type)
-    ].copy()
+    # กรองงบประมาณ
+    filtered_df = df[df['Price_THB'] <= user_budget].copy()
+    
+    # ถ้าผู้ใช้ไม่ได้เลือก "ทั้งหมด" ค่อยกรองทำเล
+    if user_location != "ทั้งหมด":
+        filtered_df = filtered_df[filtered_df['Location'].str.contains(user_location, na=False)]
+        
+    # ถ้าผู้ใช้ไม่ได้เลือก "ทั้งหมด" ค่อยกรองประเภทอสังหาฯ
+    if user_property_type != "ทั้งหมด":
+        filtered_df = filtered_df[filtered_df['Property_Type'] == user_property_type]
 
+    # ถ้ากรองแล้วไม่เหลือข้อมูลเลย คืนค่ากลับไป
     if filtered_df.empty:
         return filtered_df
 

@@ -39,10 +39,10 @@ user_budget = st.sidebar.number_input(
     min_value=500000, max_value=50000000, value=5000000, step=500000
 )
 
-property_types = df['Property_Type'].dropna().unique().tolist()
+property_types = ["ทั้งหมด"] + df['Property_Type'].dropna().unique().tolist()
 user_property_type = st.sidebar.selectbox("ประเภทอสังหาริมทรัพย์", property_types)
 
-locations = ["ศาลายา", "พุทธมณฑล", "เมืองนครปฐม","สนามจันทร์", "ห้วยจรเข้", "พระปฐมเจดีย์", "สามพราน", "กำแพงแสน", "นครชัยศรี", "ดอนตูม", "อ้อมใหญ่", "ไร่ขิง", "กระทุ่มล้ม", "ทุ่งลูกนก", "บางเลน", "ทุ่งกระพังโหม", "คลองโยง"]
+locations = ["ทั้งหมด","ศาลายา", "พุทธมณฑล", "เมืองนครปฐม","สนามจันทร์", "ห้วยจรเข้", "พระปฐมเจดีย์", "สามพราน", "กำแพงแสน", "นครชัยศรี", "ดอนตูม", "อ้อมใหญ่", "ไร่ขิง", "กระทุ่มล้ม", "ทุ่งลูกนก", "บางเลน", "ทุ่งกระพังโหม", "คลองโยง"]
 user_location = st.sidebar.selectbox("ทำเลที่สนใจ", locations)
 
 st.sidebar.divider()
@@ -68,7 +68,14 @@ if st.sidebar.button("🔍 วิเคราะห์หาตัวเลื�
         result_df = filter_and_rank_properties(
             df, user_budget, user_location, user_property_type, rules_dict
         )
-        
+
+    if result_df.empty:
+        st.warning(
+            f"😔 ไม่พบ {user_property_type} ในย่าน {user_location} "
+            f"ที่ราคาต่ำกว่า {user_budget:,.0f} บาท ลองปรับเพิ่มงบประมาณ หรือเลือกทำเล 'ทั้งหมด' ดูนะครับ"
+    )
+
+    else:    
         # คำนวณ Affordability Score และ Final Score
         result_df['Affordability_Score'] = result_df['Price_THB'].apply(
             lambda price: calculate_affordability_score(
@@ -119,6 +126,7 @@ if st.sidebar.button("🔍 วิเคราะห์หาตัวเลื�
                 # แสดงรายละเอียดทุก card ไม่ว่าจะ safe หรือ risky
                 st.markdown(f"**{str(row['Title_Clean'])[:50]}...**")
                 st.write(f"📍 **ทำเล:** {row['Location']}")
+                st.write(f"🏢 **ประเภท:** {row['Property_Type']}")
                 st.write(f"📐 **พื้นที่:** {row['Area']}")
                 st.write(f"💰 **ราคาขาย:** {row['Price_THB']:,.0f} บาท")
 
@@ -156,9 +164,9 @@ if st.sidebar.button("🔍 วิเคราะห์หาตัวเลื�
         st.subheader("📊 ข้อมูลทางเลือกทั้งหมดที่ผ่านเกณฑ์")
 
         display_cols = [
-            'Title_Clean', 'Location', 'Price_THB', 'Area',
+            'Title_Clean','Property_Type', 'Location', 'Price_THB', 'Area',
             'Rental_Yield_Pct', 'Capital_Gain_Pct_Per_Year',
-            'Investment_Score', 'Affordability_Score', 'Final_Score',  # เพิ่มตรงนี้
+            'Investment_Score', 'Affordability_Score', 'Final_Score',
             'Risk_Level', 'Investment_Tags', 'Net_Profit_5Y', 'Sale_Advice', 'Risk_Warnings'
         ]
         display_cols = [c for c in display_cols if c in result_df.columns]
