@@ -12,7 +12,7 @@ def evaluate_investment_tag(rental_yield, capital_gain, rules_dict):
 
     # 1. เช็คความคุ้มค่า (ยุบรวม logic ให้ใช้เกณฑ์จาก JSON ที่เดียว)
     if rental_yield >= min_yield and capital_gain >= min_gain:
-        tags.append("🌟 สุดยอดทำเลทอง")
+        tags.append("🌟 ซื้อปล่อยเช่าก็ได้เก็งกำไรก็ดี")
     elif rental_yield >= min_yield:
         tags.append("💰 เน้นปล่อยเช่า (Passive Income)")
     elif capital_gain >= min_gain:
