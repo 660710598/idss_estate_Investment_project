@@ -8,6 +8,24 @@
 - `knowledge/` - กฎความรู้และไฟล์เกี่ยวกับกฎ (เช่น `city_plan_rules.py`, `expert_rules.json`)
  - `model/` - โมดูลด้านโมเดล เช่น `decision_logic.py`, `financial_calc.py`
 
+## โครงสร้างโปรเจค (รายละเอียด)
+
+```
+app/
+	main.py  # UI/UX (Streamlit app entry)
+data/
+	Cleaning.py  # data cleaning
+	Get_Property_Links.py  # scraper (selenium)
+	NakhonPathom_Properties_Cleaned.csv  # sample CSV
+knowledge/
+	city_plan_rules.py
+	expert_rules.json
+	financial_rules.py
+model/
+	decision_logic.py
+	financial_calc.py
+```
+
 ## วิธีติดตั้ง และรันโปรเจค (Quick Start)
 
 1. สร้าง virtual environment (Windows PowerShell):
