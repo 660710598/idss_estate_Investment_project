@@ -7,6 +7,7 @@
 - `data/` - ข้อมูลตัวอย่างและข้อมูลนำเข้า
 - `knowledge/` - กฎความรู้และไฟล์เกี่ยวกับกฎ (เช่น `city_plan_rules.py`, `expert_rules.json`)
 - `model/` - โมดูลด้านโมเดล เช่น `decision_tree.py`, `financial_calc.py`
+ - `model/` - โมดูลด้านโมเดล เช่น `decision_logic.py`, `financial_calc.py`
 
 ## วิธีติดตั้ง และรันโปรเจค (Quick Start)
 
@@ -31,8 +32,8 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-3. WebDriver / Selenium:
-- สคริปต์ `data/scraping/Get_Property_Links.py` ใช้ `selenium` + เบราว์เซอร์ (เช่น Chrome). ต้องมี WebDriver (เช่น ChromeDriver) ที่ตรงกับเวอร์ชันเบราว์เซอร์ และอยู่ใน `PATH`.
+- 3. WebDriver / Selenium:
+- สคริปต์ `data/Get_Property_Links.py` ใช้ `selenium` + เบราว์เซอร์ (เช่น Chrome). ต้องมี WebDriver (เช่น ChromeDriver) ที่ตรงกับเวอร์ชันเบราว์เซอร์ และอยู่ใน `PATH`.
 - ทางเลือก: ติดตั้ง `webdriver-manager` (รวมไว้ใน `requirements.txt`) และปรับสคริปต์ให้ใช้ `webdriver_manager.chrome import ChromeDriverManager` เพื่อดาวน์โหลดไดร์เวอร์อัตโนมัติ.
 
 4. คำสั่งรันสำคัญ (ตัวอย่าง):
@@ -40,13 +41,13 @@ pip install -r requirements.txt
 - ดึงลิงก์ประกาศ (scraper):
 
 ```powershell
-python data/scraping/Get_Property_Links.py
+python data/Get_Property_Links.py
 ```
 
 - ทำความสะอาดข้อมูลและสร้างไฟล์ CSV ที่ใช้โดยแอป:
 
 ```powershell
-python data/scraping/Cleaning.py
+python data/Cleaning.py
 ```
 
 - รันแอป Streamlit (UI):

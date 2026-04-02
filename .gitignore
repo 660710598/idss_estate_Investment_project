@@ -1,6 +1,28 @@
-# Ignore virtual environment
+# Virtual environment
 .venv/
 
-# Ignore scraped data files
-data/scraping/*.db
-data/scraping/*.csv
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE / editor
+.vscode/
+.idea/
+
+# Env files
+.env
+
+# Testing / type checking caches
+.pytest_cache/
+.mypy_cache/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Data files (databases) - keep CSVs tracked in repo when needed
+data/*.db
+
+# Logs
+*.log
