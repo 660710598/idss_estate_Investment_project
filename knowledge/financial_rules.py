@@ -41,12 +41,11 @@ def calculate_net_gain(gain_per_year, holding_years):
     return gross_gain - tax - 1.0
 
 def get_sale_advice(net_profit):
-    
-    if net_profit > 10:
-        return "💰 น่าซื้อขาย: กำไรคุ้มค่าเหนื่อย"
-    elif net_profit > 0:
-        return "👌 ซื้อมาขายพอได้กำไร: ดีกว่าถือไว้เฉยๆ"
+    if net_profit >= 20:
+        return "💰 น่าซื้อขาย: กำไรสูง คุ้มค่าเหนื่อยและการลงทุน"
+    elif net_profit >= 10:
+        return "👌 พอได้กำไร: ชนะเงินเฟ้อ แต่เทียบฝากประจำอาจไม่คุ้มค่าเสียโอกาส"
     else:
-        return "❌ อย่าเพิ่งขาย: หักภาษีและค่าใช้จ่ายแล้วอาจขาดทุน"
+        return "❌ อย่าเพิ่งขาย: กำไรต่ำเกินไป หักค่าใช้จ่ายแฝงแล้วอาจเข้าเนื้อ"
 
 

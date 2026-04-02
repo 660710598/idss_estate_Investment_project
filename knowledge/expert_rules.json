@@ -10,29 +10,16 @@
     "property_type_suitability": {
         "condo": {"best_for": ["student_rental", "working_class"], "risk_level": "medium"},
         "land": {"best_for": ["long_term_speculation", "farming"], "risk_level": "high"},
-        "house": {"best_for": ["family", "long_term_residence"], "risk_level": "low"}
+        "house": {"best_for": ["family", "long_term_residence"], "risk_level": "low"},
+        "commercial": {"best_for": ["business_use", "high_rental_demand"], "risk_level": "medium"},
+        "industrial": {"best_for": ["manufacturing", "logistics"], "risk_level": "high"},
+        "Apartment": {"best_for": ["student_rental", "working_class"], "risk_level": "medium"},
+        "dormitory": {"best_for": ["student_rental"], "risk_level": "medium"}
+
     },
     "risk_scoring_weights": {
         "low_yield_penalty": -2,
         "bad_location_penalty": -3,
         "high_price_penalty": -1
-    },
-    "target_group_logic": {
-        "studio_1bed": {
-            "max_bedrooms": 1,
-            "label": "👤 คนโสด / นักศึกษา",
-            "description": "เน้นปล่อยเช่าง่าย สภาพคล่องสูง"
-        },
-        "family_small": {
-            "min_bedrooms": 2,
-            "max_bedrooms": 3,
-            "label": "👨👩👧 ครอบครัวเริ่มต้น",
-            "description": "กลุ่มเป้าหมายหลักในพื้นที่นครปฐม"
-        },
-        "family_large": {
-            "min_bedrooms": 4,
-            "label": "🏠 ครอบครัวใหญ่",
-            "description": "เน้นอยู่เองยาวๆ หรือทำเป็นโฮมออฟฟิศ"
-        }
     }
 }

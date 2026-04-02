@@ -88,15 +88,23 @@ def calculate_investment_score(rental_yield, capital_gain, price, property_type,
         prop_key = 'condo'
     elif 'ที่ดิน' in property_type:
         prop_key = 'land'
-    elif property_type in ['บ้านเดี่ยว', 'ทาวน์โฮม', 'บ้านแฝด', 'บ้าน']:
+    elif property_type in ['บ้านเดี่ยว', 'ทาวน์โฮม', 'บ้านแฝด', 'บ้าน', 'ทาวน์เฮ้าส์']:
         prop_key = 'house'
+    elif property_type in ['อาคารพาณิชย์', 'ร้านขาย']:
+        prop_key = 'commercial'
+    elif property_type in ['โรงงาน', 'คลังสินค้า', 'โกดัง']:
+        prop_key = 'industrial'
+    elif property_type in ['อพาร์ทเม้นท์']:
+        prop_key = 'Apartment'
+    elif property_type in ['หอพัก']:
+        prop_key = 'dormitory'
         
     if prop_key and prop_key in prop_suitability:
         risk_level = prop_suitability[prop_key].get('risk_level', 'medium')
         if risk_level == 'low':
-            score += 1.0  # ความเสี่ยงต่ำ (เช่น บ้าน) ให้โบนัสคะแนน
+            score += 1.0  # ความเสี่ยงต่ำ 
         elif risk_level == 'high':
-            score -= 1.0  # ความเสี่ยงสูง (เช่น ที่ดินเปล่า) หักคะแนน
+            score -= 1.0  # ความเสี่ยงสูง 
             
     # ควบคุมคะแนนให้อยู่ในกรอบ 0.0 - 10.0
     return max(0.0, min(10.0, score))
