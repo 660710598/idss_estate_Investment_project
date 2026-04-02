@@ -6,7 +6,6 @@
 - `app/` - โค้ดหลักของแอปพลิเคชัน
 - `data/` - ข้อมูลตัวอย่างและข้อมูลนำเข้า
 - `knowledge/` - กฎความรู้และไฟล์เกี่ยวกับกฎ (เช่น `city_plan_rules.py`, `expert_rules.json`)
-- `model/` - โมดูลด้านโมเดล เช่น `decision_tree.py`, `financial_calc.py`
  - `model/` - โมดูลด้านโมเดล เช่น `decision_logic.py`, `financial_calc.py`
 
 ## วิธีติดตั้ง และรันโปรเจค (Quick Start)
@@ -15,6 +14,8 @@
 
 ```powershell
 python -m venv .venv
+```
+```powershell
 .\.venv\Scripts\Activate.ps1
 ```
 
@@ -22,6 +23,8 @@ python -m venv .venv
 
 ```cmd
 python -m venv .venv
+```
+```cmd
 .\.venv\Scripts\activate
 ```
 
@@ -29,6 +32,8 @@ python -m venv .venv
 
 ```powershell
 python -m pip install --upgrade pip
+```
+```powershell
 pip install -r requirements.txt
 ```
 
