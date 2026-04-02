@@ -16,7 +16,7 @@ st.set_page_config(page_title="IDSS Real Estate Nakhon Pathom", layout="wide", p
 # โหลดข้อมูลและ Knowledge Base
 @st.cache_data
 def load_data():
-    conn = sqlite3.connect('data/scraping/NakhonPathom_IDSS.db')
+    conn = sqlite3.connect('data/NakhonPathom_IDSS.db')
     df = pd.read_sql_query("SELECT * FROM properties", conn)
     conn.close()
     return df

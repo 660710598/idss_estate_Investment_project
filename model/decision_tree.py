@@ -28,7 +28,7 @@ def filter_and_rank_properties(df, user_budget, user_location, user_property_typ
 
         # เช็คความเสี่ยงทางการเงินถ้ามีข้อมูลเพียงพอ
         if pd.notna(row['Rental_Yield_Pct']) and pd.notna(row['Capital_Gain_Pct_Per_Year']):
-            risks.extend(check_investment_risk(row['Rental_Yield_Pct'], row['Capital_Gain_Pct_Per_Year']))
+            risks.extend(check_investment_risk(row['Rental_Yield_Pct'], row['Capital_Gain_Pct_Per_Year'], rules_dict))
         return " | ".join(risks)
 
     # Risk Assessment
@@ -57,7 +57,9 @@ def filter_and_rank_properties(df, user_budget, user_location, user_property_typ
         lambda row: calculate_investment_score(
             row['Rental_Yield_Pct'],
             row['Capital_Gain_Pct_Per_Year'],
-            row['Price_THB']
+            row['Price_THB'],
+            row['Property_Type'],
+            rules_dict
         ), axis=1
     )
 
