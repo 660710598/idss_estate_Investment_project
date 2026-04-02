@@ -8,7 +8,7 @@ import pandas as pd
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from model.decision_tree import filter_and_rank_properties
+from model.decision_logic import filter_and_rank_properties
 from model.financial_calc import calculate_monthly_payment, get_affordability_flag, calculate_affordability_score
 
 st.set_page_config(page_title="IDSS Real Estate Nakhon Pathom", layout="wide", page_icon="🏠")
@@ -69,7 +69,7 @@ if st.sidebar.button("🔍 วิเคราะห์หาตัวเลื�
             df, user_budget, user_location, user_property_type, rules_dict
         )
         
-        # เพิ่มตรงนี้ --- คำนวณ Composite Score จาก What-If
+        # คำนวณ Affordability Score และ Final Score
         result_df['Affordability_Score'] = result_df['Price_THB'].apply(
             lambda price: calculate_affordability_score(
                 calculate_monthly_payment(
